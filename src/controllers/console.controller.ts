@@ -13,7 +13,7 @@ export class ConsoleController extends Controller {
 
   // Récupère une console par ID
   @Get("{id}")
-  public async getConsoleById(@Path() id: number): Promise<ConsoleDTO | null> {
+  public async getConsoleById(@Path() id: number): Promise<ConsoleDTO> {
     return consoleService.getConsoleById(id);
   }
 
@@ -23,6 +23,7 @@ export class ConsoleController extends Controller {
     @Body() requestBody: ConsoleDTO
   ): Promise<ConsoleDTO> {
     const { name, manufacturer } = requestBody;
+
     return consoleService.createConsole(name, manufacturer);
   }
 

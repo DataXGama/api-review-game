@@ -1,9 +1,7 @@
-import { not } from "joi";
 import { GameDTO } from "../dto/game.dto";
 import { notFound } from "../error/NotFoundError";
 import { Console } from "../models/console.model";
 import { Game } from "../models/game.model";
-import { consoleService } from "./console.service";
 
 export class GameService {
   public async getAllGames(): Promise<GameDTO[]> {
@@ -59,7 +57,7 @@ export class GameService {
     if (gameDto.console?.id) game.console_id = console.id;
 
     game.save()
-    
+
     return game;
   }
 }

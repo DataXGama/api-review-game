@@ -39,6 +39,16 @@ export class ReviewService {
         })
     }
 
+    public async delete(reviewId: number): Promise<void> {
+        const review = await Review.findByPk(reviewId);
+
+        if(!review){
+            throw notFound("review");
+        }
+
+        review.destroy();
+    }
+
     public async update(id: number, reviewDto: ReviewDTO): Promise<ReviewDTO> {
         const review = await Review.findByPk(id)
 

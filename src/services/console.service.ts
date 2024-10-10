@@ -1,6 +1,9 @@
 import { HostNotFoundError, UUID, UUIDV4 } from "sequelize";
 import { Console } from "../models/console.model";
 import { notFound } from "../error/NotFoundError";
+import { Game } from "../models/game.model";
+import { Review } from "../models/review.model";
+import { preConditionFailed } from "../error/PreConditionFailedError";
 
 export class ConsoleService {
 
@@ -30,9 +33,34 @@ export class ConsoleService {
   // Supprime une console par ID
   public async deleteConsole(id: number): Promise<void> {
     const console = await Console.findByPk(id);
-    if (console) {
-      console.destroy();
+
+    if (!console) {
+      throw notFound("console");
     }
+
+    const games = await Game.findAll({
+      where: {
+        console_id: console.id,
+      }
+    });
+
+    for(const game of games){
+      const amountReview = await Review.count({
+        where: {
+          game_id: game.id
+        }
+      })
+
+      if(amountReview > 0){
+        throw preConditionFailed("review count > 0 ")
+      }
+    }
+
+    for(const game of games){
+      game.destroy();
+    }
+
+    console.destroy();
   }
 
   // Met à jour une console

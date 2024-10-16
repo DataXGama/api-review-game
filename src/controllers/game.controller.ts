@@ -24,7 +24,7 @@ export class GameController extends Controller {
   // Supprime un jeu par ID
   @Delete("{id}")
   public async deleteGame(@Path() id: number): Promise<void> {
-    await gameService.delete(id);
+    await gameService.delete(id); 
   }
 
   @Post("/")

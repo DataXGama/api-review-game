@@ -24,6 +24,12 @@ export class ReviewController extends Controller {
         return reviewService.create(requestBody);
     }
 
+    // Supprime une review par ID
+    @Delete("{id}")
+    public async deleteReview(@Path() id: number): Promise<void> {
+        await reviewService.delete(id);
+    }
+
     // Met à jour une review par ID
     @Patch("{id}")
     public async updateReview(

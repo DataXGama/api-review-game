@@ -1,6 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database"; // Connexion à la base de données
 import { GameDTO } from "../dto/game.dto";
+import { Game } from "./game.model";
 
 export interface ReviewAttributes {
   id?: number;
@@ -14,11 +15,11 @@ export class Review
   extends Model<ReviewAttributes>
   implements ReviewAttributes
 {
-  id!: number;
-  rating!: number;
-  review_text!: string;
-  game_id!: number;
-  game!: GameDTO;
+  public id!: number;
+  public rating!: number;
+  public review_text!: string;
+  public game_id!: number;
+  public game!: GameDTO;
 }
 
 Review.init(
@@ -45,3 +46,5 @@ Review.init(
     tableName: "reviews",
   }
 );
+
+Review.belongsTo(Game, { foreignKey: "game_id", as: "game" })

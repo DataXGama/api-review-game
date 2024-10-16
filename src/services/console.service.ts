@@ -4,6 +4,7 @@ import { notFound } from "../error/NotFoundError";
 import { Game } from "../models/game.model";
 import { Review } from "../models/review.model";
 import { preConditionFailed } from "../error/PreConditionFailedError";
+import { GameDTO } from "../dto/game.dto";
 
 export class ConsoleService {
 
@@ -38,11 +39,7 @@ export class ConsoleService {
       throw notFound("console");
     }
 
-    const games = await Game.findAll({
-      where: {
-        console_id: console.id,
-      }
-    });
+    const games = await this.getGamesFor(console.id)
 
     for(const game of games){
       const amountReview = await Review.count({
@@ -61,6 +58,20 @@ export class ConsoleService {
     }
 
     console.destroy();
+  }
+
+  public async getGamesFor(consoleId: number): Promise<Game[]> {
+    const console = await Console.findByPk(consoleId);
+
+    if(!console){
+      throw notFound("Console")
+    }
+    
+    return Game.findAll({
+      where: {
+        console_id: consoleId,
+      }
+    });
   }
 
   // Met à jour une console
